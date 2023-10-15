@@ -184,6 +184,9 @@ def git_clone(url, dir, name, commithash=None):
 
     try:
         run(f'"{git}" clone "{url}" "{dir}"', f"Cloning {name} into {dir}...", f"Couldn't clone {name}", live=True)
+        run(f'"{git}" -C "{dir}" config core.filemode false', f"Ignore access permission diff {dir}", f"Could not update access permission {dir}")
+        if name == "Stable Diffusion":
+            run(f'sed -i -e "s/dict()))/dict())).cuda()/g" {dir}/ldm/util.py', f"Updating {dir}/ldm/util.py", f"Could not update {dir}/ldm/util.py")
     except RuntimeError:
         shutil.rmtree(dir, ignore_errors=True)
         raise
